@@ -24,7 +24,7 @@ sudo ./scripts/setup-kali-host.sh
 ```
 
 If the script adds your user to the `docker` group, log out and reconnect before running Docker commands as that user.
-If you run behind a proxy, export `HTTP_PROXY`, `HTTPS_PROXY`, and `NO_PROXY` before setup; the scripts pass them through to Docker, Docker builds, and the gateway service.
+If you run behind a proxy, export `HTTP_PROXY`, `HTTPS_PROXY`, and `NO_PROXY` before setup; the scripts pass them through to Docker, Docker builds, the gateway service, and the gateway container.
 
 ## Install Gateway Service
 
@@ -74,6 +74,7 @@ The output redacts common token, user, account, session, IP, and hardware fields
 - Use SSH tunnels and firewall rules that default-deny inbound traffic.
 - The assisted login CLI refuses non-loopback login, API, and noVNC hosts.
 - IBKR does not support fully automated Client Portal Gateway authentication; this flow keeps 2FA manual.
+- Proxy URLs with embedded credentials can be visible to local admins through systemd or Docker metadata; prefer a local unauthenticated proxy hop when possible.
 
 ## Troubleshooting
 
