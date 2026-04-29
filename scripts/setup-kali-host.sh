@@ -9,6 +9,26 @@ fi
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TARGET_USER="${SUDO_USER:-root}"
 
+write_proxy_drop_in() {
+  local service_dir="$1"
+  local wrote_proxy=false
+
+  mkdir -p "${service_dir}"
+  {
+    echo "[Service]"
+    for proxy_var in HTTP_PROXY HTTPS_PROXY NO_PROXY http_proxy https_proxy no_proxy; do
+      if [[ -n "${!proxy_var:-}" ]]; then
+        printf 'Environment="%s=%s"\n' "${proxy_var}" "${!proxy_var}"
+        wrote_proxy=true
+      fi
+    done
+  } >"${service_dir}/proxy.conf"
+
+  if [[ "${wrote_proxy}" != true ]]; then
+    rm -f "${service_dir}/proxy.conf"
+  fi
+}
+
 apt-get update
 apt-get install -y --no-install-recommends \
   ca-certificates \
@@ -35,7 +55,10 @@ if ! command -v websockify >/dev/null 2>&1 || [[ ! -d /usr/share/novnc ]]; then
   apt-get install -y --no-install-recommends novnc websockify
 fi
 
+write_proxy_drop_in "/etc/systemd/system/docker.service.d"
+systemctl daemon-reload
 systemctl enable --now docker
+systemctl restart docker
 
 if [[ "${TARGET_USER}" != "root" ]]; then
   usermod -aG docker "${TARGET_USER}"

@@ -24,6 +24,7 @@ sudo ./scripts/setup-kali-host.sh
 ```
 
 If the script adds your user to the `docker` group, log out and reconnect before running Docker commands as that user.
+If you run behind a proxy, export `HTTP_PROXY`, `HTTPS_PROXY`, and `NO_PROXY` before setup; the scripts pass them through to Docker and the gateway service.
 
 ## Install Gateway Service
 
