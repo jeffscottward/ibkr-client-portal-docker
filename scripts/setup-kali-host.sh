@@ -23,12 +23,6 @@ apt-get install -y --no-install-recommends \
   xdg-utils \
   xvfb
 
-for optional_package in chromium openbox; do
-  if ! apt-get install -y --no-install-recommends "${optional_package}"; then
-    echo "Warning: could not install optional package: ${optional_package}" >&2
-  fi
-done
-
 if ! docker compose version >/dev/null 2>&1; then
   if apt-cache show docker-compose-plugin >/dev/null 2>&1; then
     apt-get install -y --no-install-recommends docker-compose-plugin
