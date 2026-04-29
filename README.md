@@ -1,4 +1,13 @@
-# ibkr-vertex-ai-fund
+<div align="center">
+  <p>
+    <img src="https://img.shields.io/badge/Interactive%20Brokers-Client%20Portal-cc0000?style=for-the-badge&logo=interactivebrokers&logoColor=white" alt="Interactive Brokers Client Portal" />
+    <span>&nbsp;+&nbsp;</span>
+    <img src="https://img.shields.io/badge/Docker-Gateway-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker Gateway" />
+  </p>
+
+  <h1>ibkr-vertex-ai-fund</h1>
+  <p><strong>Dockerized IBKR Client Portal Gateway with authenticated read-only smoke checks.</strong></p>
+</div>
 
 Local Docker baseline for the Interactive Brokers Client Portal Gateway.
 
