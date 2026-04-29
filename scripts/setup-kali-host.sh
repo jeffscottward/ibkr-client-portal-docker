@@ -24,7 +24,7 @@ apt-get install -y --no-install-recommends \
   xvfb
 
 if ! docker compose version >/dev/null 2>&1; then
-  if apt-cache show docker-compose-plugin >/dev/null 2>&1; then
+  if ! apt-cache policy docker-compose-plugin | grep -q "Candidate: (none)"; then
     apt-get install -y --no-install-recommends docker-compose-plugin
   else
     apt-get install -y --no-install-recommends docker-compose
