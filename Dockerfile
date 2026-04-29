@@ -23,7 +23,10 @@ WORKDIR /app
 
 COPY --from=gateway /app /app
 COPY conf.yaml /app/root/conf.yaml
+COPY scripts/docker-entrypoint.sh /usr/local/bin/ibkr-docker-entrypoint
+
+RUN chmod +x /usr/local/bin/ibkr-docker-entrypoint
 
 EXPOSE 5000
 
-CMD ["sh", "bin/run.sh", "root/conf.yaml"]
+CMD ["ibkr-docker-entrypoint"]

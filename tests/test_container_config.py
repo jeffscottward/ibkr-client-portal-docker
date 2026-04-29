@@ -1,3 +1,5 @@
+import os
+import subprocess
 from pathlib import Path
 
 
@@ -25,3 +27,25 @@ def test_dockerfile_declares_proxy_args_before_networked_gateway_build_step() ->
 
     for name in ("HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY", "http_proxy", "https_proxy", "no_proxy"):
         assert dockerfile.index(f"ARG {name}") < build_step_index
+
+
+def test_gateway_entrypoint_translates_proxy_env_to_java_proxy_options() -> None:
+    env = {
+        "PATH": os.environ.get("PATH", ""),
+        "IBKR_ENTRYPOINT_DRY_RUN": "1",
+        "HTTPS_PROXY": "http://user:password@proxy.local:18080",
+        "NO_PROXY": "localhost,127.0.0.1",
+    }
+
+    result = subprocess.run(
+        ["sh", str(ROOT / "scripts/docker-entrypoint.sh")],
+        env=env,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    assert "-Dhttps.proxyHost=proxy.local" in result.stdout
+    assert "-Dhttps.proxyPort=18080" in result.stdout
+    assert "-Dhttp.nonProxyHosts=localhost|127.0.0.1" in result.stdout
+    assert "user:password" not in result.stdout
