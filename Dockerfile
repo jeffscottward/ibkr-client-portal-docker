@@ -1,4 +1,4 @@
-ARG GATEWAY_ZIP_URL=https://download2.interactivebrokers.com/portal/clientportal.gw.zip
+ARG GATEWAY_ZIP_URL=https://download2.interactivebrokers.com/portal/clientportal.beta.gw.zip
 
 FROM alpine:3.20 AS gateway
 

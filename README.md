@@ -7,6 +7,11 @@
 
   <h1>ibkr-client-portal-docker</h1>
   <p><strong>Dockerized IBKR Client Portal Gateway with authenticated read-only smoke checks.</strong></p>
+  <p>
+    <a href="https://github.com/jeffscottward/ibkr-client-portal-docker/actions/workflows/ci.yml"><img src="https://github.com/jeffscottward/ibkr-client-portal-docker/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+    <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="MIT License" />
+    <img src="https://img.shields.io/badge/python-3.10%2B-blue.svg" alt="Python 3.10+" />
+  </p>
 </div>
 
 Local Docker baseline for the Interactive Brokers Client Portal Gateway.
@@ -83,7 +88,7 @@ Your browser will warn about a local self-signed certificate. Continue only for 
 If the gateway is already running and you only want to run the checks:
 
 ```bash
-uv run scripts/read_only_check.py
+uv run ibkr-read-only-check
 ```
 
 The script calls only read/session endpoints:
@@ -94,6 +99,19 @@ The script calls only read/session endpoints:
 - `/portfolio/accounts`
 
 Sensitive token, user, account, session, IP, and hardware fields are redacted before output.
+
+## Development checks
+
+Local checks:
+
+```bash
+uv run pytest
+bash -n start.sh
+docker compose config --quiet
+docker compose build
+```
+
+CI runs unit tests, enforces 80% package coverage, validates Compose config, and builds the gateway image. A weekly scheduled CI run helps catch external drift in Docker base images or IBKR's gateway download.
 
 ## Blog baseline example
 
@@ -124,3 +142,7 @@ pm2 stop ibkr-client-portal-docker-gateway
 pm2 delete ibkr-client-portal-docker-gateway
 docker compose down
 ```
+
+## License
+
+MIT. See [LICENSE](LICENSE).

@@ -1,9 +1,11 @@
+name: ibkr-client-portal-docker
+
 services:
   ibkr-client-portal:
     build:
       context: .
       args:
-        GATEWAY_ZIP_URL: ${IBKR_GATEWAY_ZIP_URL:-https://download2.interactivebrokers.com/portal/clientportal.gw.zip}
+        GATEWAY_ZIP_URL: ${IBKR_GATEWAY_ZIP_URL:-https://download2.interactivebrokers.com/portal/clientportal.beta.gw.zip}
     container_name: ibkr-client-portal
     ports:
       - "127.0.0.1:5000:5000"

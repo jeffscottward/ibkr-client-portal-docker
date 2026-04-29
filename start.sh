@@ -25,7 +25,7 @@ else
 fi
 
 echo "Waiting for gateway to accept HTTPS requests"
-uv run scripts/wait_for_gateway.py --url "$LOGIN_URL"
+uv run ibkr-wait-for-gateway --url "$LOGIN_URL"
 
 if command -v open >/dev/null 2>&1; then
   open "$LOGIN_URL"
@@ -36,8 +36,8 @@ else
 fi
 
 echo "Waiting for IBKR login at $LOGIN_URL"
-uv run scripts/wait_for_login.py \
+uv run ibkr-wait-for-login \
   --base-url "$API_BASE_URL" \
   --timeout "$LOGIN_TIMEOUT_SECONDS"
 
-uv run scripts/read_only_check.py --base-url "$API_BASE_URL"
+uv run ibkr-read-only-check --base-url "$API_BASE_URL"
