@@ -21,11 +21,11 @@ This starts from the OSQuant/blog `ibportal` pattern:
 
 Current IBKR doc updates applied here:
 
-- uses IBKR's current Standard Release gateway URL
+- uses IBKR's Beta Release gateway URL by default because it authenticated successfully while the Standard Release did not in local testing
 - uses a maintained multi-arch Java 8 JRE image instead of the old `openjdk:8u212-jre-alpine3.9`
 - keeps `listenPort: 5000`, which IBKR documents as the default
 - adds `ccp: false`, matching current IBKR `conf.yaml` examples
-- binds Docker to `127.0.0.1:5000` so the login UI is not exposed on the LAN
+- binds Docker to IPv4 and IPv6 loopback so the login UI is not exposed on the LAN
 
 ## Requirements
 
@@ -43,12 +43,6 @@ Use paper trading first. After live login, authenticated API calls can place rea
 ```
 
 `start.sh` starts the Docker Compose gateway under PM2, waits for the local gateway to accept HTTPS requests, opens `https://localhost:5000/`, waits until IBKR reports the brokerage session as authenticated, then runs `scripts/read_only_check.py`.
-
-The working Beta gateway path is also preserved as:
-
-```bash
-./start-beta.sh
-```
 
 If the browser does not open automatically, open:
 
@@ -89,10 +83,12 @@ This mirrors the blog's AAPL contract metadata example against `https://localhos
 
 IBKR documents the Client Portal Gateway as local-machine software. Keep the browser login, gateway, and API client on this machine unless moving to a separately approved OAuth flow.
 
-If the browser shows `Client login succeeds` but API calls still return `401 Unauthorized`, the login callback completed but the gateway did not expose an authenticated API session. Restart the gateway and retry at exactly `https://localhost:5000/`. IBKR also publishes a Beta gateway for Standard gateway issues:
+If the browser shows `Client login succeeds` but API calls still return `401 Unauthorized`, the login callback completed but the gateway did not expose an authenticated API session. Restart the gateway and retry at exactly `https://localhost:5000/`.
+
+To override the default gateway zip:
 
 ```bash
-IBKR_GATEWAY_ZIP_URL=https://download2.interactivebrokers.com/portal/clientportal.beta.gw.zip ./start.sh
+IBKR_GATEWAY_ZIP_URL=https://download2.interactivebrokers.com/portal/clientportal.gw.zip ./start.sh
 ```
 
 Stop the gateway with:
