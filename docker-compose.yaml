@@ -6,6 +6,12 @@ services:
       context: .
       args:
         GATEWAY_ZIP_URL: ${IBKR_GATEWAY_ZIP_URL:-https://download2.interactivebrokers.com/portal/clientportal.beta.gw.zip}
+        HTTP_PROXY: ${HTTP_PROXY:-}
+        HTTPS_PROXY: ${HTTPS_PROXY:-}
+        NO_PROXY: ${NO_PROXY:-}
+        http_proxy: ${http_proxy:-}
+        https_proxy: ${https_proxy:-}
+        no_proxy: ${no_proxy:-}
     container_name: ibkr-client-portal
     ports:
       - "127.0.0.1:5000:5000"

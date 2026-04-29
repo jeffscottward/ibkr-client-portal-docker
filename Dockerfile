@@ -3,6 +3,12 @@ ARG GATEWAY_ZIP_URL=https://download2.interactivebrokers.com/portal/clientportal
 FROM alpine:3.20 AS gateway
 
 ARG GATEWAY_ZIP_URL
+ARG HTTP_PROXY
+ARG HTTPS_PROXY
+ARG NO_PROXY
+ARG http_proxy
+ARG https_proxy
+ARG no_proxy
 
 WORKDIR /app
 
