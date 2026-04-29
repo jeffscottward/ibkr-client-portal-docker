@@ -116,7 +116,7 @@ wheels = [
 ]
 
 [[package]]
-name = "ibkr-vertex-ai-fund"
+name = "ibkr-client-portal-docker"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [

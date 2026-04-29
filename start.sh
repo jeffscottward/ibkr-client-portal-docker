@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PM2_NAME="${PM2_NAME:-ibkr-vertex-ai-fund-gateway}"
+PM2_NAME="${PM2_NAME:-ibkr-client-portal-docker-gateway}"
 IBKR_GATEWAY_ZIP_URL="${IBKR_GATEWAY_ZIP_URL:-https://download2.interactivebrokers.com/portal/clientportal.beta.gw.zip}"
 LOGIN_URL="${IBKR_LOGIN_URL:-https://localhost:5000/}"
 API_BASE_URL="${IBKR_API_BASE_URL:-https://localhost:5000/v1/api}"

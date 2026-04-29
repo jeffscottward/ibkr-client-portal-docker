@@ -5,7 +5,7 @@
     <img src="https://img.shields.io/badge/Docker-Gateway-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker Gateway" />
   </p>
 
-  <h1>ibkr-vertex-ai-fund</h1>
+  <h1>ibkr-client-portal-docker</h1>
   <p><strong>Dockerized IBKR Client Portal Gateway with authenticated read-only smoke checks.</strong></p>
 </div>
 
@@ -94,7 +94,7 @@ IBKR_GATEWAY_ZIP_URL=https://download2.interactivebrokers.com/portal/clientporta
 Stop the gateway with:
 
 ```bash
-pm2 stop ibkr-vertex-ai-fund-gateway
-pm2 delete ibkr-vertex-ai-fund-gateway
+pm2 stop ibkr-client-portal-docker-gateway
+pm2 delete ibkr-client-portal-docker-gateway
 docker compose down
 ```

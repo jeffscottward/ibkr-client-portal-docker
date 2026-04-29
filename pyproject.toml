@@ -1,5 +1,5 @@
 [project]
-name = "ibkr-vertex-ai-fund"
+name = "ibkr-client-portal-docker"
 version = "0.1.0"
 description = "Local Docker baseline for IBKR Client Portal Gateway experiments."
 requires-python = ">=3.10"
