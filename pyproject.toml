@@ -4,12 +4,14 @@ version = "0.1.0"
 description = "Local Docker baseline for IBKR Client Portal Gateway experiments."
 requires-python = ">=3.10"
 dependencies = [
+    "playwright>=1.51.0",
     "requests>=2.32.0",
     "urllib3>=2.0.0",
 ]
 
 [project.scripts]
 ibkr-read-only-check = "ibkr_client_portal_docker.cli.read_only_check:main"
+ibkr-remote-login = "ibkr_client_portal_docker.cli.remote_login:main"
 ibkr-wait-for-gateway = "ibkr_client_portal_docker.cli.wait_for_gateway:main"
 ibkr-wait-for-login = "ibkr_client_portal_docker.cli.wait_for_login:main"
 
@@ -32,4 +34,6 @@ pythonpath = ["src"]
 testpaths = ["tests"]
 
 [tool.coverage.run]
-omit = ["src/ibkr_client_portal_docker/cli/*"]
+omit = [
+    "src/ibkr_client_portal_docker/cli/*",
+]

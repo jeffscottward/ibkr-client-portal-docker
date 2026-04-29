@@ -113,6 +113,32 @@ docker compose build
 
 CI runs unit tests, enforces 80% package coverage, validates Compose config, and builds the gateway image. A weekly scheduled CI run helps catch external drift in Docker base images or IBKR's gateway download.
 
+## Remote Kali VPS mode
+
+This repo can prepare an already-provisioned Kali Linux VPS to act as a private IBKR gateway host. It does not create the VPS or install Kali itself.
+
+The remote mode uses `systemd`, Docker, Chromium, Xvfb, x11vnc, and noVNC. Login is assisted: the CLI can open and fill the remote browser login form, but you still approve IBKR 2FA manually. The gateway and noVNC bind to loopback and should be reached through SSH tunnels only.
+The assisted login CLI also refuses non-loopback login, API, and noVNC hosts to avoid sending credentials to the wrong place.
+
+Start from an SSH session on the VPS:
+
+```bash
+git clone https://github.com/jeffscottward/ibkr-client-portal-docker.git
+cd ibkr-client-portal-docker
+sudo ./scripts/setup-kali-host.sh
+sudo ./scripts/install-systemd.sh
+sudo systemctl start ibkr-client-portal-docker-gateway
+uv run ibkr-remote-login
+```
+
+From your laptop, tunnel the remote browser and gateway:
+
+```bash
+ssh -L 6080:127.0.0.1:6080 -L 5000:127.0.0.1:5000 user@your-vps
+```
+
+Then open `http://127.0.0.1:6080/vnc.html` locally if you need to watch or complete the login. See [docs/KALI_VPS.md](docs/KALI_VPS.md).
+
 ## Blog baseline example
 
 After login:

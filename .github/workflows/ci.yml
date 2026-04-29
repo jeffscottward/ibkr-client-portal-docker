@@ -20,7 +20,9 @@ jobs:
           python-version: "3.12"
       - run: uv sync --dev
       - run: uv run pytest
+      - run: uv run ibkr-remote-login --help
       - run: bash -n start.sh
+      - run: bash -n scripts/setup-kali-host.sh scripts/install-systemd.sh
       - run: docker compose config --quiet
 
   gateway-build:
