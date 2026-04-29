@@ -117,7 +117,7 @@ CI runs unit tests, enforces 80% package coverage, validates Compose config, and
 
 This repo can prepare an already-provisioned Kali Linux VPS to act as a private IBKR gateway host. It does not create the VPS or install Kali itself.
 
-The remote mode uses `systemd`, Docker, Chromium, Xvfb, x11vnc, and noVNC. Login is assisted: the CLI can open and fill the remote browser login form, but you still approve IBKR 2FA manually. The gateway and noVNC bind to loopback and should be reached through SSH tunnels only.
+The remote mode uses `systemd`, Docker, Chromium, Xvfb, x11vnc, and noVNC. The setup script uses system Chromium when apt can install it and falls back to Playwright-managed Chromium. Login is assisted: the CLI can open and fill the remote browser login form, but you still approve IBKR 2FA manually. The gateway and noVNC bind to loopback and should be reached through SSH tunnels only.
 The assisted login CLI also refuses non-loopback login, API, and noVNC hosts to avoid sending credentials to the wrong place.
 
 Start from an SSH session on the VPS:

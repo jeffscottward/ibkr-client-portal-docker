@@ -12,10 +12,8 @@ TARGET_USER="${SUDO_USER:-root}"
 apt-get update
 apt-get install -y --no-install-recommends \
   ca-certificates \
-  chromium \
   docker.io \
   git \
-  openbox \
   pipx \
   python3 \
   python3-pip \
@@ -24,6 +22,12 @@ apt-get install -y --no-install-recommends \
   x11vnc \
   xdg-utils \
   xvfb
+
+for optional_package in chromium openbox; do
+  if ! apt-get install -y --no-install-recommends "${optional_package}"; then
+    echo "Warning: could not install optional package: ${optional_package}" >&2
+  fi
+done
 
 if ! docker compose version >/dev/null 2>&1; then
   if apt-cache show docker-compose-plugin >/dev/null 2>&1; then
@@ -49,8 +53,10 @@ fi
 
 if [[ "${TARGET_USER}" != "root" ]]; then
   sudo -u "${TARGET_USER}" -H uv sync --project "${REPO_DIR}"
+  sudo -u "${TARGET_USER}" -H uv run --project "${REPO_DIR}" python -m playwright install chromium
 else
   uv sync --project "${REPO_DIR}"
+  uv run --project "${REPO_DIR}" python -m playwright install chromium
 fi
 
 echo "Kali host setup complete."

@@ -47,7 +47,7 @@ Run:
 uv run ibkr-remote-login
 ```
 
-The command prompts for username and password. The password is hidden and not stored. It opens Chromium inside an Xvfb display and publishes the display through noVNC on loopback.
+The command prompts for username and password. The password is hidden and not stored. It opens system Chromium when available, otherwise Playwright-managed Chromium, inside an Xvfb display and publishes the display through noVNC on loopback.
 
 From your laptop, open:
 
