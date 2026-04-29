@@ -19,7 +19,7 @@ class AuthClient(Protocol):
 class HttpSession(Protocol):
     verify: bool
 
-    def get(self, url: str, timeout: float) -> requests.Response: ...
+    def get(self, url: str, timeout: float, allow_redirects: bool) -> requests.Response: ...
 
 
 def describe_brokerage_readiness(client: AuthClient) -> tuple[bool, str]:
@@ -90,7 +90,7 @@ def wait_for_gateway(
 
     while monotonic() < deadline:
         try:
-            response = session.get(url, timeout=10)
+            response = session.get(url, timeout=10, allow_redirects=False)
             on_message(f"Gateway reachable: HTTP {response.status_code}")
             return True
         except requests.RequestException as exc:
