@@ -1,0 +1,17 @@
+services:
+  ibkr-client-portal:
+    build:
+      context: .
+      args:
+        GATEWAY_ZIP_URL: ${IBKR_GATEWAY_ZIP_URL:-https://download2.interactivebrokers.com/portal/clientportal.gw.zip}
+    container_name: ibkr-client-portal
+    ports:
+      - "127.0.0.1:5000:5000"
+      - "[::1]:5000:5000"
+
+# Login URL:
+#   https://localhost:5000/
+#
+# Read-only smoke endpoints after login:
+#   https://localhost:5000/v1/api/sso/validate
+#   https://localhost:5000/v1/api/tickle
