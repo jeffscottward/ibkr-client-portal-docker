@@ -10,7 +10,7 @@ REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TARGET_USER="${SUDO_USER:-root}"
 
 apt-get update
-apt-get install -y \
+apt-get install -y --no-install-recommends \
   ca-certificates \
   chromium \
   docker.io \
@@ -27,14 +27,14 @@ apt-get install -y \
 
 if ! docker compose version >/dev/null 2>&1; then
   if apt-cache show docker-compose-plugin >/dev/null 2>&1; then
-    apt-get install -y docker-compose-plugin
+    apt-get install -y --no-install-recommends docker-compose-plugin
   else
-    apt-get install -y docker-compose
+    apt-get install -y --no-install-recommends docker-compose
   fi
 fi
 
 if ! command -v websockify >/dev/null 2>&1 || [[ ! -d /usr/share/novnc ]]; then
-  apt-get install -y novnc websockify
+  apt-get install -y --no-install-recommends novnc websockify
 fi
 
 systemctl enable --now docker
