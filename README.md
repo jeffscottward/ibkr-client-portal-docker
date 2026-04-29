@@ -27,12 +27,38 @@ Current IBKR doc updates applied here:
 - adds `ccp: false`, matching current IBKR `conf.yaml` examples
 - binds Docker to IPv4 and IPv6 loopback so the login UI is not exposed on the LAN
 
-## Requirements
+## Assumptions and dependencies
 
-- Docker with Docker Compose
-- active, funded IBKR Pro account
-- supported IBKR 2FA method
-- browser login on the same machine running this gateway
+This repo is intentionally small, but it assumes a few local tools and account conditions.
+
+Local tools:
+
+- Docker with Docker Compose v2
+- PM2, used to keep the gateway process running outside the current shell
+- `uv`, used to run the Python smoke-check scripts and manage their dependencies
+- a desktop browser on the same machine as Docker
+- macOS `open` or Linux `xdg-open` if you want `start.sh` to open the login page automatically
+
+Install examples:
+
+```bash
+npm install -g pm2
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+IBKR/account assumptions:
+
+- active IBKR account with Client Portal API access
+- IBKR Pro account for protected Client Portal Web API endpoints
+- supported 2FA method, such as IB Key
+- browser login, gateway, and API client all on the same machine
+
+Runtime assumptions:
+
+- the gateway binds to `https://localhost:5000/`
+- Docker exposes only local loopback ports, not the LAN
+- the gateway uses a local self-signed certificate, so browser and Python checks disable or bypass TLS verification for localhost only
+- the default gateway download is IBKR's Beta Release because it authenticated successfully in local testing while the Standard Release did not
 
 Use paper trading first. After live login, authenticated API calls can place real orders.
 
