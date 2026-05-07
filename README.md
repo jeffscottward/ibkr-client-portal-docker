@@ -129,6 +129,7 @@ cd ibkr-client-portal-docker
 sudo ./scripts/setup-kali-host.sh
 sudo ./scripts/install-systemd.sh
 sudo systemctl start ibkr-client-portal-docker-gateway
+sudo systemctl start ibkr-client-portal-docker-keepalive
 uv run ibkr-remote-login
 ```
 
@@ -139,6 +140,10 @@ ssh -L 6080:127.0.0.1:6080 -L 5000:127.0.0.1:5000 user@your-vps
 ```
 
 Then open `http://127.0.0.1:6080/vnc.html` locally if you need to watch or complete the login. See [docs/KALI_VPS.md](docs/KALI_VPS.md).
+
+The installer also enables `ibkr-client-portal-docker-keepalive.service`. It runs on the VPS and calls `/tickle` every 60 seconds through the gateway loopback URL, so idle-session maintenance does not depend on your laptop staying connected. It logs only authentication booleans and expiry timing, not tokens or account identifiers.
+
+IBKR can still require fresh manual login or 2FA after gateway restarts, session invalidation, or broker-side expiry windows. The keepalive is not an authentication bypass.
 
 ## Blog baseline example
 

@@ -8,8 +8,10 @@ fi
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SERVICE_PATH="/etc/systemd/system/ibkr-client-portal-docker-gateway.service"
+KEEPALIVE_SERVICE_PATH="/etc/systemd/system/ibkr-client-portal-docker-keepalive.service"
 GATEWAY_ZIP_URL="${IBKR_GATEWAY_ZIP_URL:-https://download2.interactivebrokers.com/portal/clientportal.beta.gw.zip}"
 GATEWAY_CONFIG="${IBKR_GATEWAY_CONFIG:-root/conf.yaml}"
+KEEPALIVE_INTERVAL="${IBKR_KEEPALIVE_INTERVAL:-60}"
 PROXY_ENVIRONMENT=""
 
 for proxy_var in HTTP_PROXY HTTPS_PROXY NO_PROXY http_proxy https_proxy no_proxy; do
@@ -24,6 +26,11 @@ elif command -v docker-compose >/dev/null 2>&1; then
   COMPOSE_COMMAND="$(command -v docker-compose)"
 else
   echo "Docker Compose is required. Run sudo ./scripts/setup-kali-host.sh first." >&2
+  exit 1
+fi
+
+if ! command -v uv >/dev/null 2>&1; then
+  echo "uv is required. Run sudo ./scripts/setup-kali-host.sh first." >&2
   exit 1
 fi
 
@@ -48,8 +55,27 @@ TimeoutStopSec=60
 WantedBy=multi-user.target
 SERVICE
 
+cat >"${KEEPALIVE_SERVICE_PATH}" <<SERVICE
+[Unit]
+Description=IBKR Client Portal Docker Gateway Keepalive
+After=ibkr-client-portal-docker-gateway.service network-online.target
+Wants=ibkr-client-portal-docker-gateway.service network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=${REPO_DIR}
+ExecStart=$(command -v uv) run ibkr-keepalive --base-url https://127.0.0.1:5000/v1/api --interval ${KEEPALIVE_INTERVAL}
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+SERVICE
+
 systemctl daemon-reload
 systemctl enable ibkr-client-portal-docker-gateway.service
+systemctl enable ibkr-client-portal-docker-keepalive.service
 
 echo "Installed ${SERVICE_PATH}"
-echo "Start with: sudo systemctl start ibkr-client-portal-docker-gateway"
+echo "Installed ${KEEPALIVE_SERVICE_PATH}"
+echo "Start with: sudo systemctl start ibkr-client-portal-docker-gateway ibkr-client-portal-docker-keepalive"

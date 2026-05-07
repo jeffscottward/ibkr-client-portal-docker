@@ -31,6 +31,7 @@ If you run behind a proxy, export `HTTP_PROXY`, `HTTPS_PROXY`, and `NO_PROXY` be
 ```bash
 sudo ./scripts/install-systemd.sh
 sudo systemctl start ibkr-client-portal-docker-gateway
+sudo systemctl start ibkr-client-portal-docker-keepalive
 sudo systemctl status ibkr-client-portal-docker-gateway
 ```
 
@@ -38,6 +39,7 @@ Logs:
 
 ```bash
 sudo journalctl -u ibkr-client-portal-docker-gateway -f
+sudo journalctl -u ibkr-client-portal-docker-keepalive -f
 ```
 
 ## Assisted Login
@@ -65,6 +67,10 @@ uv run ibkr-read-only-check
 ```
 
 The output redacts common token, user, account, session, IP, and hardware fields.
+
+## Keepalive
+
+The keepalive service runs on the VPS and calls `/tickle` every 60 seconds through `https://127.0.0.1:5000/v1/api`. It keeps idle authenticated sessions warm without requiring your laptop to stay connected. It does not replace IBKR's manual login or 2FA requirements after restarts or broker-side expiry.
 
 ## Security Notes
 

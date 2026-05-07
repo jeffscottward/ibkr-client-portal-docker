@@ -10,6 +10,7 @@ dependencies = [
 ]
 
 [project.scripts]
+ibkr-keepalive = "ibkr_client_portal_docker.cli.keepalive:main"
 ibkr-read-only-check = "ibkr_client_portal_docker.cli.read_only_check:main"
 ibkr-remote-login = "ibkr_client_portal_docker.cli.remote_login:main"
 ibkr-wait-for-gateway = "ibkr_client_portal_docker.cli.wait_for_gateway:main"
