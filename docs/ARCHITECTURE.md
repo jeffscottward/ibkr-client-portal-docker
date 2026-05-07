@@ -9,9 +9,10 @@
 
 ## Components
 
-- `Dockerfile`: builds a local Client Portal Gateway image from IBKR's gateway zip.
+- `Dockerfile`: builds a local Client Portal Gateway image from IBKR's gateway zip and installs maintained standard/beta runtime configs.
 - `docker-compose.yaml`: exposes the gateway only on loopback.
 - `start.sh`: starts Docker Compose under PM2, opens the browser, waits for authentication, then runs read-only checks.
+- `conf.beta.yaml`: optional diagnostic runtime config for IBKR's beta backend, with Docker-safe loopback/private-network allowlist entries.
 - `src/ibkr_client_portal_docker/client.py`: gateway-local HTTP client.
 - `src/ibkr_client_portal_docker/readiness.py`: gateway and brokerage-session readiness logic.
 - `src/ibkr_client_portal_docker/smoke.py`: read-only endpoint checks.
@@ -24,6 +25,7 @@
 - Docker base image.
 - Local browser login and 2FA.
 - IBKR Client Portal Web API endpoints.
+- IBKR standard and beta gateway backends.
 
 ## Stability Approach
 

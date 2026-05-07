@@ -23,6 +23,7 @@ WORKDIR /app
 
 COPY --from=gateway /app /app
 COPY conf.yaml /app/root/conf.yaml
+COPY conf.beta.yaml /app/root/conf.beta.yaml
 COPY scripts/docker-entrypoint.sh /usr/local/bin/ibkr-docker-entrypoint
 
 RUN chmod +x /usr/local/bin/ibkr-docker-entrypoint

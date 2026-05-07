@@ -40,6 +40,7 @@ proxy_http="${HTTP_PROXY:-${http_proxy:-$proxy_https}}"
 
 append_java_proxy "https" "$proxy_https"
 append_java_proxy "http" "$proxy_http"
+gateway_config="${IBKR_GATEWAY_CONFIG:-root/conf.yaml}"
 
 non_proxy="${NO_PROXY:-${no_proxy:-}}"
 if [ -n "$non_proxy" ]; then
@@ -50,11 +51,12 @@ fi
 
 if [ "${IBKR_ENTRYPOINT_DRY_RUN:-}" = "1" ]; then
   printf '%s\n' "${JAVA_TOOL_OPTIONS:-}"
+  printf 'IBKR_GATEWAY_CONFIG=%s\n' "$gateway_config"
   exit 0
 fi
 
 if [ "$#" -eq 0 ]; then
-  set -- sh bin/run.sh root/conf.yaml
+  set -- sh bin/run.sh "$gateway_config"
 fi
 
 exec "$@"

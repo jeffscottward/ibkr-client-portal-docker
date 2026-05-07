@@ -9,6 +9,7 @@ fi
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SERVICE_PATH="/etc/systemd/system/ibkr-client-portal-docker-gateway.service"
 GATEWAY_ZIP_URL="${IBKR_GATEWAY_ZIP_URL:-https://download2.interactivebrokers.com/portal/clientportal.beta.gw.zip}"
+GATEWAY_CONFIG="${IBKR_GATEWAY_CONFIG:-root/conf.yaml}"
 PROXY_ENVIRONMENT=""
 
 for proxy_var in HTTP_PROXY HTTPS_PROXY NO_PROXY http_proxy https_proxy no_proxy; do
@@ -36,6 +37,7 @@ Wants=docker.service network-online.target
 Type=simple
 WorkingDirectory=${REPO_DIR}
 Environment=IBKR_GATEWAY_ZIP_URL=${GATEWAY_ZIP_URL}
+Environment=IBKR_GATEWAY_CONFIG=${GATEWAY_CONFIG}
 ${PROXY_ENVIRONMENT}ExecStart=${COMPOSE_COMMAND} up --build
 ExecStop=${COMPOSE_COMMAND} down
 Restart=always

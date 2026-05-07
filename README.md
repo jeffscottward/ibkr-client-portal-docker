@@ -19,14 +19,15 @@ Local Docker baseline for the Interactive Brokers Client Portal Gateway.
 This starts from the OSQuant/blog `ibportal` pattern:
 
 - download IBKR's `clientportal.gw.zip`
-- copy `conf.yaml` into `root/conf.yaml`
+- copy maintained `conf.yaml` and `conf.beta.yaml` files into the gateway root
 - expose the gateway on port `5000`
-- run `bin/run.sh root/conf.yaml`
+- run `bin/run.sh` with the configured gateway YAML
 - use Python `requests` with TLS verification disabled for the gateway's self-signed local cert
 
 Current IBKR doc updates applied here:
 
 - uses IBKR's Beta Release gateway URL by default because it authenticated successfully while the Standard Release did not in local testing
+- keeps `root/conf.yaml` as the default runtime config; `root/conf.beta.yaml` is available only as an explicit diagnostic override
 - uses a maintained multi-arch Java 8 JRE image instead of the old `openjdk:8u212-jre-alpine3.9`
 - keeps `listenPort: 5000`, which IBKR documents as the default
 - adds `ccp: false`, matching current IBKR `conf.yaml` examples
@@ -63,7 +64,7 @@ Runtime assumptions:
 - the gateway binds to `https://localhost:5000/`
 - Docker exposes only local loopback ports, not the LAN
 - the gateway uses a local self-signed certificate, so browser and Python checks disable or bypass TLS verification for localhost only
-- the default gateway download is IBKR's Beta Release because it authenticated successfully in local testing while the Standard Release did not
+- the default gateway download uses IBKR's Beta Release zip, but the runtime config defaults to `root/conf.yaml`
 
 Use paper trading first. After live login, authenticated API calls can place real orders.
 
@@ -159,6 +160,12 @@ To override the default gateway zip:
 
 ```bash
 IBKR_GATEWAY_ZIP_URL=https://download2.interactivebrokers.com/portal/clientportal.gw.zip ./start.sh
+```
+
+To test the experimental beta runtime config instead of the standard config:
+
+```bash
+IBKR_GATEWAY_CONFIG=root/conf.beta.yaml ./start.sh
 ```
 
 Stop the gateway with:

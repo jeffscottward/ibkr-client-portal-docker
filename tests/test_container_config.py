@@ -21,6 +21,31 @@ def test_compose_passes_proxy_environment_to_gateway_container() -> None:
         assert compose.index(f"{name}: ${{{name}:-}}", environment_index) > environment_index
 
 
+def test_compose_defaults_to_standard_gateway_runtime_config() -> None:
+    compose = (ROOT / "docker-compose.yaml").read_text()
+
+    assert "IBKR_GATEWAY_CONFIG: ${IBKR_GATEWAY_CONFIG:-root/conf.yaml}" in compose
+
+
+def test_dockerfile_copies_standard_and_beta_gateway_configs() -> None:
+    dockerfile = (ROOT / "Dockerfile").read_text()
+
+    assert "COPY conf.yaml /app/root/conf.yaml" in dockerfile
+    assert "COPY conf.beta.yaml /app/root/conf.beta.yaml" in dockerfile
+
+
+def test_beta_config_uses_beta_backend_and_docker_allowlist() -> None:
+    beta_config = (ROOT / "conf.beta.yaml").read_text()
+
+    assert 'proxyRemoteHost: "https://ndcdyn.interactivebrokers.com"' in beta_config
+    assert 'svcEnvironment: "v1"' in beta_config
+    assert 'ip2loc: "off"' in beta_config
+    assert 'portalBaseURL: ""' in beta_config
+    assert "ccp: false" in beta_config
+    assert "    - 127.0.0.1" in beta_config
+    assert "    - 172.*" in beta_config
+
+
 def test_dockerfile_declares_proxy_args_before_networked_gateway_build_step() -> None:
     dockerfile = (ROOT / "Dockerfile").read_text()
     build_step_index = dockerfile.index("RUN apk add")
@@ -48,4 +73,5 @@ def test_gateway_entrypoint_translates_proxy_env_to_java_proxy_options() -> None
     assert "-Dhttps.proxyHost=proxy.local" in result.stdout
     assert "-Dhttps.proxyPort=18080" in result.stdout
     assert "-Dhttp.nonProxyHosts=localhost|127.0.0.1" in result.stdout
+    assert "IBKR_GATEWAY_CONFIG=root/conf.yaml" in result.stdout
     assert "user:password" not in result.stdout

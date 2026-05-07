@@ -14,6 +14,7 @@ services:
         no_proxy: ${no_proxy:-}
     container_name: ibkr-client-portal
     environment:
+      IBKR_GATEWAY_CONFIG: ${IBKR_GATEWAY_CONFIG:-root/conf.yaml}
       HTTP_PROXY: ${HTTP_PROXY:-}
       HTTPS_PROXY: ${HTTPS_PROXY:-}
       NO_PROXY: ${NO_PROXY:-}
